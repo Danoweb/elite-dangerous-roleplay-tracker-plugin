@@ -5,13 +5,10 @@ EDRP Plugin For Elite Dangerous Market Connector
 Handles events from EDMC and passes the information along to the EDRP API.
 """
 
-
-from __future__ import absolute_import, division, print_function
+from __future__ import division, print_function
 
 import plug
-
-
-EDRP_API_URL = 'http://edrp-api.danowebstudios.com/'
+import edrp
 
 
 def plugin_start():
