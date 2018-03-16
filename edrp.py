@@ -5,6 +5,7 @@ Methods for generating HTTP requests for the EDRP API.
 
 from __future__ import division, print_function
 
+import json
 import requests
 
 
@@ -87,8 +88,29 @@ def get_active():
     # TODO: Once the format for the returned object is discovered, update
     #       this to check for list content and then return the actual list
     #       if it is present.
-    active_json = get('/active')
-    return active_json
+    response_json = get('/active')
+    if 'message' not in response_json:
+        return None
+    # Message will be returned as a string of JSON that needs to be loaded.
+    try:
+        msg_json = json.loads(response_json['message'])
+    except json.JSONDecodeError:
+        err_msg = (
+            'Error: Unable to load the JSON response to get_active(): {}'
+        ).format(response_json['message'])
+        print(err_msg)
+        return None
+    # Loading the message JSON should give you a list of dictionary objects.
+    if type(msg_json) != list:
+        return None
+    # Pull the CMDR names from the list of dictionaries.
+    cmdr_names = []
+    for msg_dict in msg_json:
+        if 'cmdrName' not in msg_dict:
+            print('Unexpected Value: {}'.format(msg_dict))
+            continue
+        cmdr_names.append(msg_dict['cmdrName'])
+    return cmdr_names
 
 
 def get_active_count():
@@ -100,5 +122,15 @@ def get_active_count():
     # TODO: Once the format for the returned object is discovered, update
     #       this to check for list content and then return the actual list
     #       if it is present.
-    active_count_json = get('/active-count')
-    return active_count_json
+    response_json = get('/active-count')
+    if 'message' not in response_json:
+        return None
+    # Message should be a string of an integer value.
+    try:
+        active_count = int(response_json['message'])
+    except ValueError:
+        print('Error: Unable to convert the message to an integer: {}'.format(
+                response_json['message']
+        ))
+        return None
+    return active_count
