@@ -3,7 +3,7 @@
 Methods for generating HTTP requests for the EDRP API.
 """
 
-from __future__ import absolute_import, division, print_function
+from __future__ import division, print_function
 
 import requests
 
@@ -29,7 +29,7 @@ def logon(cmdr):
     :param cmdr: CMDR name.
     :return:
     """
-    post('/logon/:{}'.format(cmdr))
+    post('/logon/{}'.format(cmdr))
 
 
 def logoff(cmdr):
@@ -38,7 +38,7 @@ def logoff(cmdr):
     :param cmder: CMDR name.
     :return:
     """
-    post('/logoff/:{}'.format(cmdr))
+    post('/logoff/{}'.format(cmdr))
 
 
 def station(station, cmdr):
@@ -48,7 +48,7 @@ def station(station, cmdr):
     :param cmdr: CMDR name.
     :return:
     """
-    post('/station/:{}/:{}'.format(station, cmdr))
+    post('/station/{}/{}'.format(station, cmdr))
 
 
 def system(system, cmdr):
@@ -58,4 +58,4 @@ def system(system, cmdr):
     :param cmdr: CMDR name.
     :return:
     """
-    post('/system/:{}/:{}'.format(system, cmdr))
+    post('/system/{}/{}'.format(system, cmdr))
