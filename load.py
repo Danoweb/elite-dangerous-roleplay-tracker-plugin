@@ -142,7 +142,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             log_source,
             'ShutDown|CMDR: {}'.format(cmdr)
         )
-        post_logoff(cmdr)
+        edrp.post_logoff(cmdr)
 
     # Do not process anything further if not logged in to the ED RP group.
     if not LOGGED_IN_TO_EDRP:
