@@ -88,6 +88,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     :param is_beta: Whether the player is in a Beta universe.
     :return: Error message.
     """
+    global LOGGED_IN_TO_EDRP
     error = None
     log_source = 'JournalEntry'
     # Check for an event key.
