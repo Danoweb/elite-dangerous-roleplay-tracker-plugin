@@ -178,7 +178,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
                 'FSDJump|CMDR {} arrived in the {} system.'.format(cmdr, system)
             )
         edrp.post_system(cmdr, system)
-        edrp.post_station(cmdr, station)
     # Liftoff: Liftoff from a planet's surface.
     if entry['event'] == 'Liftoff':
         log_msg(
@@ -187,7 +186,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             'Liftoff|CMDR {} departed from a planet in the {} system.'.format(cmdr, system)
         )
         edrp.post_system(cmdr, system)
-        edrp.post_station(cmdr, station)
     # Location
     if entry['event'] == 'Location':
         log_msg(
@@ -205,7 +203,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             'Touchdown|CMDR {} landed on a planet in the {} system.'.format(cmdr, system)
         )
         edrp.post_system(cmdr, system)
-        edrp.post_station(cmdr, station)
     # Undocked
     if entry['event'] == 'Undocked':
         if 'StationName' in entry:
