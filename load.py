@@ -126,7 +126,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
                 'CMDR: {}, System: {}, Station: {}'
             ).format(game_mode, group, cmdr, system, station)
         )
-        if game_mode == 'Group' and group == 'ED RP':
+        if game_mode == 'Group' and group.upper() == 'ED RP':
             LOGGED_IN_TO_EDRP = True
             edrp.post_logon(cmdr)
             edrp.post_system(cmdr, system)
