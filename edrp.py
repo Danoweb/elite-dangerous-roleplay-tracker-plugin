@@ -19,6 +19,9 @@ def post(payload):
     :param payload: Payload for the HTTP POST request.
     :return: Response from HTTP POST request.
     """
+    # Replace spaces in the payload with '+'.
+    payload = payload.replace(' ', '+')
+    # Make the POST request.
     r = requests.post('{}{}'.format(EDRP_API_URL, payload))
     if r.status_code != 200:
         return None
@@ -30,6 +33,9 @@ def get(payload):
     :param payload: Payload for the HTTP GET request.
     :return: JSON object received from the EDRP API.
     """
+    # Replace spaces in the payload with '+'.
+    payload = payload.replace(' ', '+')
+    # Make the GET request.
     r = requests.get('{}{}'.format(EDRP_API_URL, payload))
     if r.status_code != 200:
         return None
