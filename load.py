@@ -116,8 +116,8 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         edrp.post_station(cmdr, station)
     # LoadGame: Sent when CMDR logs in to a game mode.
     if entry['event'] == 'LoadGame':
-        game_mode = entry['event'].get('GameMode', None)
-        group = entry['event'].get('Group', None)
+        game_mode = entry.get('GameMode', None)
+        group = entry.get('Group', None)
         log_msg(
             'INFO',
             log_source,
