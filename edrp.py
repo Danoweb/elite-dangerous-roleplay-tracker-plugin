@@ -17,13 +17,12 @@ def post(payload):
     """
     Create an HTTP POST request for the EDRP API.
     :param payload: Payload for the HTTP POST request.
-    :return:
+    :return: Response from HTTP POST request.
     """
     r = requests.post('{}{}'.format(EDRP_API_URL, payload))
-    print('Payload: {}'.format(payload))
-    print('Status Code: {}'.format(r.status_code))
-    print('Response: {}'.format(r.text))
-
+    if r.status_code != 200:
+        return None
+    return r.text
 
 def get(payload):
     """
@@ -32,9 +31,6 @@ def get(payload):
     :return: JSON object received from the EDRP API.
     """
     r = requests.get('{}{}'.format(EDRP_API_URL, payload))
-    print('Payload: {}'.format(payload))
-    print('Status Code: {}'.format(r.status_code))
-    print('Response: {}'.format(r.text))
     if r.status_code != 200:
         return None
     return r.json()
@@ -59,21 +55,21 @@ def post_logoff(cmdr):
     post('/logoff/{}'.format(cmdr))
 
 
-def post_station(station, cmdr):
+def post_station(cmdr, station):
     """
     Set an event marker for a CMDR entering a station.
-    :param station: Station name.
     :param cmdr: CMDR name.
+    :param station: Station name.
     :return:
     """
     post('/station/{}/{}'.format(station, cmdr))
 
 
-def post_system(system, cmdr):
+def post_system(cmdr, system):
     """
     Set an event marker for a CMDR entering a star system.
-    :param system: System name.
     :param cmdr: CMDR name.
+    :param system: System name.
     :return:
     """
     post('/system/{}/{}'.format(system, cmdr))
@@ -85,11 +81,8 @@ def get_active():
     minutes.
     :return: List of user names.
     """
-    # TODO: Once the format for the returned object is discovered, update
-    #       this to check for list content and then return the actual list
-    #       if it is present.
     response_json = get('/active')
-    if 'message' not in response_json:
+    if not response_json or 'message' not in response_json:
         return None
     # Message will be returned as a string of JSON that needs to be loaded.
     try:
@@ -119,11 +112,8 @@ def get_active_count():
     minutes.
     :return: User count.
     """
-    # TODO: Once the format for the returned object is discovered, update
-    #       this to check for list content and then return the actual list
-    #       if it is present.
     response_json = get('/active-count')
-    if 'message' not in response_json:
+    if not response_json or 'message' not in response_json:
         return None
     # Message should be a string of an integer value.
     try:
