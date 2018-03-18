@@ -23,6 +23,7 @@ DisableDirPage=yes
 DefaultGroupName={#MyAppName}
 DisableProgramGroupPage=yes
 OutputBaseFilename=EDRP_Setup
+OutputDir=latest
 Compression=lzma
 SolidCompression=yes
 AllowNoIcons=yes
