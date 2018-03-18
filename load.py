@@ -11,6 +11,8 @@ import plug
 import edrp
 from datetime import datetime
 
+__version__ = '0.0.1'
+
 
 # Track whether the user is logged in to EDRP.
 LOGGED_IN_TO_EDRP = False
