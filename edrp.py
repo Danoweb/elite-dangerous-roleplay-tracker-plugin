@@ -8,6 +8,8 @@ from __future__ import division, print_function
 import json
 import requests
 
+__version__ = '0.0.1'
+
 
 EDRP_API_URL = 'http://edrp-api.danowebstudios.com'
 

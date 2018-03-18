@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "EDRP Plugin for EDMC"
-#define MyAppVersion "0.1"
+#define MyAppVersion "0.0.1"
 #define MyAppPublisher "EDRP"
-#define MyAppURL "http://edrp.squarespace.com/"
+#define MyAppURL "http://edrp-api.danowebstudios.com/"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
