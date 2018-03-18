@@ -7,7 +7,7 @@ A plugin for EDMC and Elite Dangerous for tracking CMDRs on the ED RP private gr
     * This guide expects that you already have EDMC installed.
 
 #### Automated Installation
-1. Right click the following link, and click `Save link as...` : \[[EDRP_Setup.exe](https://github.com/Danoweb/elite-dangerous-roleplay-tracker-plugin/blob/master/latest/EDRP_Setup.exe)\]
+1. Right click the following link, and click `Save link as...` : \[[EDRP_Setup.exe](../blob/master/latest/EDRP_Setup.exe)\]
 2. Run the installer.
 <br><br>
 **Note:** *This is an unsigned installer and therefore may be flagged by your anti-virus. If you do not feel comfortable with this, please proceed to the **Manual Installation** section below.*
