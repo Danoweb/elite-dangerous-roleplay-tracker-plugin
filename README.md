@@ -22,7 +22,7 @@ A plugin for EDMC and Elite Dangerous for tracking CMDRs on the ED RP private gr
     3. You should now have an `elite-dangerous-roleplay-tracker-plugin-master` folder inside your plugins directory.
 5. Restart EDMC.
 
-## Expected functionality:
+## Expected Functionality
 * Listen for Logon / Logoff Events for a CMDR (Via EDMC)
 * Send Logon events to EDRP API (see API below)
 * Send Logoff events to EDRP API (See API below)
