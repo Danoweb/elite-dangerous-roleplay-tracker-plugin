@@ -97,7 +97,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         error = 'No event key in journal entry.'
         return error
 
-    # Logon/Logoff Events
+    # Logon Events
 
     # StartUp: Sent if EDMC is started while the game is already running.
     if entry['event'] == 'StartUp':
@@ -133,6 +133,13 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             edrp.post_station(cmdr, station)
         else:
             LOGGED_IN_TO_EDRP = False
+
+    # Do not process anything further if not logged in to the ED RP group.
+    if not LOGGED_IN_TO_EDRP:
+        return error
+
+    # Logoff Events
+
     # ShutDown: Sent when the game is quitted while EDMC is running.
     #       NOTE: This event is not sent when EDMC is running on a different
     #       machine so do not rely on this event.
@@ -143,10 +150,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             'ShutDown|CMDR: {}'.format(cmdr)
         )
         edrp.post_logoff(cmdr)
-
-    # Do not process anything further if not logged in to the ED RP group.
-    if not LOGGED_IN_TO_EDRP:
-        return error
 
     # Location Events
 
