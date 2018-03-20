@@ -8,14 +8,14 @@ Handles events from EDMC and passes the information along to the EDRP API.
 from __future__ import division, print_function
 
 import plug
-import edrp
 from datetime import datetime
+from edrp import EDRP
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
-# Track whether the user is logged in to EDRP.
-LOGGED_IN_TO_EDRP = False
+# Class that contains all of the EDRP API function calls.
+edrp = EDRP()
 
 # Log message format.
 LOG_FORMAT = 'EDRP|{date}|{log_level}|{log_source}|{log_msg}'
@@ -62,7 +62,7 @@ def prefs_cmdr_changed(cmdr, is_beta):
     :return:
     """
     # Doesn't apply unless CMDR specific settings become necessary.
-    log_msg('INFO', 'CmdrChanged', 'New CMDR: {}'.format(cmdr))
+    log_msg('INFO', 'PrefsCmdrChanged', 'New CMDR: {}'.format(cmdr))
 
 
 def prefs_changed(cmdr, is_beta):
@@ -90,7 +90,6 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     :param is_beta: Whether the player is in a Beta universe.
     :return: Error message.
     """
-    global LOGGED_IN_TO_EDRP
     error = None
     log_source = 'JournalEntry'
     # Check for an event key.
@@ -104,7 +103,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
     # StartUp: Sent if EDMC is started while the game is already running.
     if entry['event'] == 'StartUp':
         # Unable to detect Open/Group/Solo so assume EDRP.
-        LOGGED_IN_TO_EDRP = True
+        edrp.logged_in = True
         log_msg(
             'INFO',
             log_source,
@@ -116,6 +115,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         edrp.post_logon(cmdr)
         edrp.post_system(cmdr, system)
         edrp.post_station(cmdr, station)
+        return error
     # LoadGame: Sent when CMDR logs in to a game mode.
     if entry['event'] == 'LoadGame':
         game_mode = entry.get('GameMode', None)
@@ -129,15 +129,16 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             ).format(game_mode, group, cmdr, system, station)
         )
         if game_mode == 'Group' and group.upper() == 'ED RP':
-            LOGGED_IN_TO_EDRP = True
+            edrp.logged_in = True
             edrp.post_logon(cmdr)
             edrp.post_system(cmdr, system)
             edrp.post_station(cmdr, station)
         else:
-            LOGGED_IN_TO_EDRP = False
+            edrp.logged_in = False
+        return error
 
     # Do not process anything further if not logged in to the ED RP group.
-    if not LOGGED_IN_TO_EDRP:
+    if not edrp.logged_in:
         return error
 
     # Logoff Events
@@ -152,6 +153,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             'ShutDown|CMDR: {}'.format(cmdr)
         )
         edrp.post_logoff(cmdr)
+        return error
 
     # Location Events
 
@@ -165,12 +167,12 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         edrp.post_system(cmdr, system)
         edrp.post_station(cmdr, station)
     # FSDJump: Arrived in a new system.
-    if entry['event'] == 'FSDJump':
+    elif entry['event'] == 'FSDJump':
         if 'StarPos' in entry:
             log_msg(
                 'INFO',
                 log_source,
-                'FSDJump|CMDR {} arrived in the {} system. ({},{},{})'.format(
+                'FSDJump|CMDR {} arrived in the {} system. ({}, {}, {})'.format(
                     cmdr,
                     system,
                     *tuple(entry['StarPos'])
@@ -184,7 +186,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             )
         edrp.post_system(cmdr, system)
     # Liftoff: Liftoff from a planet's surface.
-    if entry['event'] == 'Liftoff':
+    elif entry['event'] == 'Liftoff':
         log_msg(
             'INFO',
             log_source,
@@ -192,7 +194,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         )
         edrp.post_system(cmdr, system)
     # Location
-    if entry['event'] == 'Location':
+    elif entry['event'] == 'Location':
         log_msg(
             'INFO',
             log_source,
@@ -201,7 +203,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         edrp.post_system(cmdr, system)
         edrp.post_station(cmdr, station)
     # Touchdown: Touched down on a planet's surface.
-    if entry['event'] == 'Touchdown':
+    elif entry['event'] == 'Touchdown':
         log_msg(
             'INFO',
             log_source,
@@ -209,7 +211,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
         )
         edrp.post_system(cmdr, system)
     # Undocked
-    if entry['event'] == 'Undocked':
+    elif entry['event'] == 'Undocked':
         if 'StationName' in entry:
             log_msg(
                 'INFO',
@@ -226,6 +228,10 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             )
         edrp.post_system(cmdr, system)
         edrp.post_station(cmdr, station)
+    # Other: Send a ping to the API.
+    else:
+        if edrp.post_ping(cmdr):
+            log_msg('INFO', log_source, 'PING|CMDR: {}'.format(cmdr))
 
     return error
 
@@ -238,7 +244,8 @@ def dashboard_entry(cmdr, is_beta, entry):
     :param entry: The status entry as a dictionary.
     :return: Error message.
     """
-    # log_msg('INFO', 'DashboardEntry', 'Dashboard status entry has been received.')
+    if edrp.post_ping(cmdr):
+        log_msg('INFO', 'DashboardEntry', 'PING|CMDR: {}'.format(cmdr))
     return None
 
 
@@ -249,5 +256,8 @@ def cmdr_data(data, is_beta):
     :param is_beta: Whether the player is in a Beta universe.
     :return: Error message.
     """
-    # log_msg('INFO', 'CmdrData', 'CMDR data has been received.')
+    if 'commander' in data and 'name' in data['commander']:
+        cmdr = data['commander']['name']
+        if edrp.post_ping(cmdr):
+            log_msg('INFO', 'CmdrData', 'PING|CMDR: {}'.format(cmdr))
     return None
