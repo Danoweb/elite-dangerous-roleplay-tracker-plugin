@@ -257,5 +257,6 @@ def cmdr_data(data, is_beta):
     :return: Error message.
     """
     # log_msg('INFO', 'CmdrData', 'CMDR data has been received.')
-    edrp.post_ping(cmdr)
+    if 'commander' in data and 'name' in data['commander']:
+        edrp.post_ping(data['commander']['name'])
     return None
