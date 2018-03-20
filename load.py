@@ -172,7 +172,7 @@ def journal_entry(cmdr, is_beta, system, station, entry, state):
             log_msg(
                 'INFO',
                 log_source,
-                'FSDJump|CMDR {} arrived in the {} system. ({},{},{})'.format(
+                'FSDJump|CMDR {} arrived in the {} system. ({}, {}, {})'.format(
                     cmdr,
                     system,
                     *tuple(entry['StarPos'])
