@@ -9,7 +9,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 
 
 class EDRP(object):
