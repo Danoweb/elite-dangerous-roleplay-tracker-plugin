@@ -244,8 +244,8 @@ def dashboard_entry(cmdr, is_beta, entry):
     :param entry: The status entry as a dictionary.
     :return: Error message.
     """
-    # log_msg('INFO', 'DashboardEntry', 'Dashboard status entry has been received.')
-    edrp.post_ping(cmdr)
+    if edrp.post_ping(cmdr):
+        log_msg('INFO', 'DashboardEntry', 'PING|CMDR: {}'.format(cmdr))
     return None
 
 
@@ -256,7 +256,8 @@ def cmdr_data(data, is_beta):
     :param is_beta: Whether the player is in a Beta universe.
     :return: Error message.
     """
-    # log_msg('INFO', 'CmdrData', 'CMDR data has been received.')
     if 'commander' in data and 'name' in data['commander']:
-        edrp.post_ping(data['commander']['name'])
+        cmdr = data['commander']['name']
+        if edrp.post_ping(cmdr):
+            log_msg('INFO', 'CmdrData', 'PING|CMDR: {}'.format(cmdr))
     return None
