@@ -9,7 +9,7 @@ import json
 import requests
 from datetime import datetime, timedelta
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 
 
 class EDRP(object):
@@ -19,7 +19,7 @@ class EDRP(object):
         Container for methods used to generate HTTP requests for the EDRP API.
         """
         # URL for the EDRP API.
-        self.url = 'http://edrp-api.danowebstudios.com'
+        self.url = 'https://edrp-api.danowebstudios.com'
         self.logged_in = False
         self.ping_rate_limit = timedelta(minutes=5)
         self.last_message_sent = None
