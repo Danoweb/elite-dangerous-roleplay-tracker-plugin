@@ -32,9 +32,9 @@ A plugin for EDMC and Elite Dangerous for tracking CMDRs on the ED RP private gr
 ## EDRP API
 
 * Current API is an open JSON API which can be accessed at:<br>
-http://edrp-api.danowebstudios.com/
+https://edrp-api.danowebstudios.com/
 * List of CMDRs that are currently active on EDRP:<br>
-http://edrp-api.danowebstudios.com/web/active-list
+https://edrp-api.danowebstudios.com/web/active-list
 
 ## Elite Dangerous Market Connector - Plugin
 * Documentation about Elite Dangerous Market Connector and writing plugins for it can be found at:<br>
